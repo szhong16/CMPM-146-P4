@@ -18,6 +18,33 @@ def op_craft_wooden_axe_at_bench (state, ID):
 		return state
 	return False
 
+# new operators
+
+def op_craft_stone_axe_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.cobble[ID] >= 3 and state.stick[ID] >=2:
+		state.stone_axe[ID] += 1
+		state.plank[ID] -= 3
+		state.stick[ID] -= 2
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_craft_iron_axe_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.ingot[ID] >= 3 and state.stick[ID] >=2:
+		state.iron_axe[ID] += 1
+		state.plank[ID] -= 3
+		state.stick[ID] -= 2
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_punch_for_coal (state, ID):
+	if state.time[ID] >= 4:
+		state.coal[ID] += 1
+		state.time[ID] -= 4
+		return state
+	return False
+
 # your code here
 
 pyhop.declare_operators (op_punch_for_wood, op_craft_wooden_axe_at_bench)
@@ -55,6 +82,17 @@ def punch_for_wood (state, ID):
 
 def craft_wooden_axe_at_bench (state, ID):
 	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'plank', 3), ('op_craft_wooden_axe_at_bench', ID)]
+
+# new recipe
+def craft_stone_axe_at_bench (state, ID):
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'cobble', 3), ('op_craft_stone_axe_at_bench', ID)]
+
+def punch_for_coal (state, ID):
+	return  [('op_punch_for_coal'), ID]
+
+def punch_for_ore (state, ID):
+	return  [('op_punch_for_ore'), ID]
+
 
 # your code here
 
