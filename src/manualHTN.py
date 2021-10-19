@@ -20,28 +20,170 @@ def op_craft_wooden_axe_at_bench (state, ID):
 
 # new operators
 
-def op_craft_stone_axe_at_bench (state, ID):
-	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.cobble[ID] >= 3 and state.stick[ID] >=2:
-		state.stone_axe[ID] += 1
-		state.plank[ID] -= 3
-		state.stick[ID] -= 2
-		state.time[ID] -= 1
-		return state
-	return False
-
 def op_craft_iron_axe_at_bench (state, ID):
 	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.ingot[ID] >= 3 and state.stick[ID] >=2:
 		state.iron_axe[ID] += 1
+		state.ingot[ID] -= 3
+		state.stick[ID] -= 2
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_craft_stone_axe_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.cobble[ID] >= 3 and state.stick[ID] >=2:
+		state.stone_axe[ID] += 1
+		state.cobble[ID] -= 3
+		state.stick[ID] -= 2
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_craft_wooden_pickaxe_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.plank[ID] >= 3 and state.stick[ID] >=2:
+		state.wooden_pickaxe[ID] += 1
 		state.plank[ID] -= 3
 		state.stick[ID] -= 2
 		state.time[ID] -= 1
 		return state
 	return False
 
-def op_punch_for_coal (state, ID):
-	if state.time[ID] >= 4:
+def op_craft_iron_pickaxe_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.ingot[ID] >= 3 and state.stick[ID] >=2:
+		state.iron_pickaxe[ID] += 1
+		state.ingot[ID] -= 3
+		state.stick[ID] -= 2
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_craft_stone_pickaxe_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.cobble[ID] >= 3 and state.stick[ID] >=2:
+		state.stone_pickaxe[ID] += 1
+		state.cobble[ID] -= 3
+		state.stick[ID] -= 2
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_craft_furnace_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.cobble[ID] >= 8:
+		state.furnace[ID] += 1
+		state.cobble[ID] -= 8
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_mining_for_coal_wooden (state, ID):
+	if state.time[ID] >= 4 and state.wooden_pickaxe[ID] >= 1:
 		state.coal[ID] += 1
+		state.wooden_pickaxe -= 1
 		state.time[ID] -= 4
+		return state
+	return False
+
+def op_mining_for_coal_iron (state, ID):
+	if state.time[ID] >= 1 and state.iron_pickaxe[ID] >= 1:
+		state.coal[ID] += 1
+		state.iron_pickaxe -= 1
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_mining_for_coal_stone (state, ID):
+	if state.time[ID] >= 2 and state.stone_pickaxe[ID] >= 1:
+		state.coal[ID] += 1
+		state.stone_pickaxe -= 1
+		state.time[ID] -= 2
+		return state
+	return False
+
+def op_mining_for_ore_iron (state, ID):
+	if state.time[ID] >= 2 and state.iron_pickaxe[ID] >= 1:
+		state.ore[ID] += 1
+		state.iron_pickaxe -= 1
+		state.time[ID] -= 2
+		return state
+	return False
+
+def op_mining_for_ore_stone (state, ID):
+	if state.time[ID] >= 4 and state.stone_pickaxe[ID] >= 1:
+		state.ore[ID] += 1
+		state.stone_pickaxe -= 1
+		state.time[ID] -= 4
+		return state
+	return False
+
+def op_mining_for_cobble_iron (state, ID):
+	if state.time[ID] >= 1 and state.iron_pickaxe[ID] >= 1:
+		state.cobble[ID] += 1
+		state.iron_pickaxe -= 1
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_mining_for_cobble_stone (state, ID):
+	if state.time[ID] >= 2 and state.stone_pickaxe[ID] >= 1:
+		state.cobble[ID] += 1
+		state.stone_pickaxe -= 1
+		state.time[ID] -= 2
+		return state
+	return False
+
+def op_mining_for_cobble_wooden (state, ID):
+	if state.time[ID] >= 4 and state.wooden_pickaxe[ID] >= 1:
+		state.cobble[ID] += 1
+		state.wooden_pickaxe -= 1
+		state.time[ID] -= 4
+		return state
+	return False
+
+def op_crafting_for_plank (state, ID):
+	if state.time[ID] >= 1 and state.wood[ID] >= 1:
+		state.plank[ID] += 4
+		state.wood[ID] -= 1
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_crafting_for_stick (state, ID):
+	if state.time[ID] >= 1 and state.plank[ID] >= 2:
+		state.stick[ID] += 4
+		state.plank[ID] -= 2
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_crafting_for_bench (state, ID):
+	if state.time[ID] >= 1 and state.plank[ID] >= 4:
+		state.bench[ID] += 1
+		state.plank[ID] -= 4
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_craft_rail_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.ingot[ID] >= 6 and state.stick[ID] >= 1:
+		state.rail[ID] += 16
+		state.ingot[ID] -= 6
+		state.stick[ID] -= 1
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_craft_cart_at_bench (state, ID):
+	if state.time[ID] >= 1 and state.bench[ID] >= 1 and state.ingot[ID] >= 5:
+		state.cart[ID] += 1
+		state.ingot[ID] -= 5
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_smelf_ore_in_furnace (state, ID):
+	if state.time[ID] >= 5 and state.furnace[ID] >= 1 and state.coal[ID] >= 1 and state.ore[ID] >= 1:
+		state.ingot[ID] += 1
+		state.coal[ID] -= 1
+		state.ore[ID] -= 1
+		state.time[ID] -= 5
 		return state
 	return False
 
