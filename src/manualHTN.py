@@ -84,15 +84,65 @@ def craft_wooden_axe_at_bench (state, ID):
 	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'plank', 3), ('op_craft_wooden_axe_at_bench', ID)]
 
 # new recipe
+def craft_iron_axe_at_bench (state, ID):
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'ingot', 3), ('op_craft_iron_axe_at_bench', ID)]
+
 def craft_stone_axe_at_bench (state, ID):
-	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'cobble', 3), ('op_craft_stone_axe_at_bench', ID)]
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'cobble', 3), ('op_craft_iron_axe_at_bench', ID)]
 
-def punch_for_coal (state, ID):
-	return  [('op_punch_for_coal'), ID]
+def craft_wooden_pickaxe_at_bench (state, ID):
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'plank', 3), ('op_craft_wooden_pickaxe_at_bench', ID)]
 
-def punch_for_ore (state, ID):
-	return  [('op_punch_for_ore'), ID]
+def craft_stone_pickaxe_at_bench (state, ID): #稿子 use for mining ore
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'cobble', 3), ('op_craft_stone_pickaxe_at_bench', ID)]
 
+def craft_iron_pickaxe_at_bench (state, ID):
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'ingot', 3), ('op_craft_iron_pickaxe_at_bench', ID)]
+
+def craft_furnace_at_bench (state, ID): #熔矿炉 somewhere you use to melt metal
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'cobble', 8), ('op_craft_furnace_at_bench', ID)]
+
+def mining_for_coal_wooden (state, ID):
+	return  [('op_mining_for_coal_wooden'), ID]
+
+def mining_for_coal_iron (state, ID):
+	return [('op_mining_for_coal_iron'), ID]
+
+def mining_for_coal_stone (state, ID):
+	return [('op_mining_for_coal_stone'), ID]
+
+def mining_for_ore_iron (state, ID):
+	return  [('op_mining_for_ore_iron'), ID]
+
+def mining_for_ore_stone (state, ID):
+	return  [('op_mining_for_ore_stone'), ID]
+
+def mining_for_cobble_iron (state, ID):
+	return [('op_mining_for_cobble_iron'), ID]
+
+def mining_for_cobble_stone (state, ID):
+	return [('op_mining_for_cobble_stone'), ID]
+
+def mining_for_cobble_wooden (state, ID):
+	return [('op_mining_for_cobble_wooden'), ID]
+
+def crafting_for_plank (state, ID):
+	return [('op_crafting_for_plank'), ID]
+
+def crafting_for_stick (state, ID):
+	return [('op_crafting_for_stick'), ID]
+
+def crafting_for_bench (state, ID):
+	return [('op_crafting_for_bench'), ID]
+
+def craft_rail_at_bench (state, ID): #铁轨，扶手
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 1), ('have_enough', ID, 'ingot', 6), ('op_craft_rail_at_bench', ID)]
+
+def craft_cart_at_bench (state, ID):
+	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'ingot', 5), ('op_craft_cart_at_bench', ID)]
+
+def smelf_ore_in_furnace (state, ID):
+	return [('have_enough', ID, 'furnace', 1), ('have_enough', ID, 'coal', 1), ('have_enough', ID, 'ore', 1), ('op_smelf_ore_in_furnace', ID)]
 
 # your code here
 
