@@ -73,7 +73,7 @@ def op_craft_furnace_at_bench (state, ID):
 		return state
 	return False
 
-def op_mining_for_coal_wooden (state, ID):
+def op_wooden_pickaxe_for_coal (state, ID):
 	if state.time[ID] >= 4 and state.wooden_pickaxe[ID] >= 1:
 		state.coal[ID] += 1
 		state.wooden_pickaxe -= 1
@@ -81,7 +81,7 @@ def op_mining_for_coal_wooden (state, ID):
 		return state
 	return False
 
-def op_mining_for_coal_iron (state, ID):
+def op_iron_pickaxe_for_coal (state, ID):
 	if state.time[ID] >= 1 and state.iron_pickaxe[ID] >= 1:
 		state.coal[ID] += 1
 		state.iron_pickaxe -= 1
@@ -89,7 +89,7 @@ def op_mining_for_coal_iron (state, ID):
 		return state
 	return False
 
-def op_mining_for_coal_stone (state, ID):
+def op_stone_pickaxe_for_coal (state, ID):
 	if state.time[ID] >= 2 and state.stone_pickaxe[ID] >= 1:
 		state.coal[ID] += 1
 		state.stone_pickaxe -= 1
@@ -97,7 +97,7 @@ def op_mining_for_coal_stone (state, ID):
 		return state
 	return False
 
-def op_mining_for_ore_iron (state, ID):
+def op_iron_pickaxe_for_ore (state, ID):
 	if state.time[ID] >= 2 and state.iron_pickaxe[ID] >= 1:
 		state.ore[ID] += 1
 		state.iron_pickaxe -= 1
@@ -105,7 +105,7 @@ def op_mining_for_ore_iron (state, ID):
 		return state
 	return False
 
-def op_mining_for_ore_stone (state, ID):
+def op_stone_pickaxe_for_ore (state, ID):
 	if state.time[ID] >= 4 and state.stone_pickaxe[ID] >= 1:
 		state.ore[ID] += 1
 		state.stone_pickaxe -= 1
@@ -113,7 +113,7 @@ def op_mining_for_ore_stone (state, ID):
 		return state
 	return False
 
-def op_mining_for_cobble_iron (state, ID):
+def op_iron_pickaxe_for_cobble (state, ID):
 	if state.time[ID] >= 1 and state.iron_pickaxe[ID] >= 1:
 		state.cobble[ID] += 1
 		state.iron_pickaxe -= 1
@@ -121,7 +121,7 @@ def op_mining_for_cobble_iron (state, ID):
 		return state
 	return False
 
-def op_mining_for_cobble_stone (state, ID):
+def op_stone_pickaxe_for_cobble (state, ID):
 	if state.time[ID] >= 2 and state.stone_pickaxe[ID] >= 1:
 		state.cobble[ID] += 1
 		state.stone_pickaxe -= 1
@@ -129,7 +129,7 @@ def op_mining_for_cobble_stone (state, ID):
 		return state
 	return False
 
-def op_mining_for_cobble_wooden (state, ID):
+def op_wooden_pickaxe_for_cobble (state, ID):
 	if state.time[ID] >= 4 and state.wooden_pickaxe[ID] >= 1:
 		state.cobble[ID] += 1
 		state.wooden_pickaxe -= 1
@@ -137,7 +137,7 @@ def op_mining_for_cobble_wooden (state, ID):
 		return state
 	return False
 
-def op_crafting_for_plank (state, ID):
+def op_craft_plank (state, ID):
 	if state.time[ID] >= 1 and state.wood[ID] >= 1:
 		state.plank[ID] += 4
 		state.wood[ID] -= 1
@@ -145,7 +145,7 @@ def op_crafting_for_plank (state, ID):
 		return state
 	return False
 
-def op_crafting_for_stick (state, ID):
+def op_craft_stick (state, ID):
 	if state.time[ID] >= 1 and state.plank[ID] >= 2:
 		state.stick[ID] += 4
 		state.plank[ID] -= 2
@@ -153,7 +153,7 @@ def op_crafting_for_stick (state, ID):
 		return state
 	return False
 
-def op_crafting_for_bench (state, ID):
+def op_craft_bench (state, ID):
 	if state.time[ID] >= 1 and state.plank[ID] >= 4:
 		state.bench[ID] += 1
 		state.plank[ID] -= 4
@@ -184,6 +184,27 @@ def op_smelf_ore_in_furnace (state, ID):
 		state.coal[ID] -= 1
 		state.ore[ID] -= 1
 		state.time[ID] -= 5
+		return state
+	return False
+
+def op_iron_axe_for_wood (state, ID):
+	if state.time[ID] >= 1 and state.iron_axe[ID] >= 1:
+		state.wood[ID] += 1
+		state.time[ID] -= 1
+		return state
+	return False
+
+def op_wooden_axe_for_wood (state, ID):
+	if state.time[ID] >= 2 and state.wooden_axe[ID] >= 1:
+		state.wood[ID] += 1
+		state.time[ID] -= 2
+		return state
+	return False
+
+def op_stone_axe_for_wood (state, ID):
+	if state.time[ID] >= 1 and state.stone_axe[ID] >= 1:
+		state.wood[ID] += 1
+		state.time[ID] -= 1
 		return state
 	return False
 
@@ -244,38 +265,38 @@ def craft_iron_pickaxe_at_bench (state, ID):
 def craft_furnace_at_bench (state, ID): #熔矿炉 somewhere you use to melt metal
 	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'cobble', 8), ('op_craft_furnace_at_bench', ID)]
 
-def mining_for_coal_wooden (state, ID):
-	return  [('op_mining_for_coal_wooden'), ID]
+def wooden_pickaxe_for_coal (state, ID):
+	return  [('op_wooden_pickaxe_for_coal'), ID]
 
-def mining_for_coal_iron (state, ID):
-	return [('op_mining_for_coal_iron'), ID]
+def iron_pickaxe_for_coal (state, ID):
+	return [('op_iron_pickaxe_for_coal'), ID]
 
-def mining_for_coal_stone (state, ID):
-	return [('op_mining_for_coal_stone'), ID]
+def stone_pickaxe_for_coal (state, ID):
+	return [('op_stone_pickaxe_for_coal'), ID]
 
-def mining_for_ore_iron (state, ID):
-	return  [('op_mining_for_ore_iron'), ID]
+def iron_pickaxe_for_ore (state, ID):
+	return  [('op_iron_pickaxe_for_ore'), ID]
 
-def mining_for_ore_stone (state, ID):
-	return  [('op_mining_for_ore_stone'), ID]
+def stone_pickaxe_for_ore (state, ID):
+	return  [('op_stone_pickaxe_for_ore'), ID]
 
-def mining_for_cobble_iron (state, ID):
-	return [('op_mining_for_cobble_iron'), ID]
+def iron_pickaxe_for_cobble (state, ID):
+	return [('op_iron_pickaxe_for_cobble'), ID]
 
-def mining_for_cobble_stone (state, ID):
-	return [('op_mining_for_cobble_stone'), ID]
+def stone_pickaxe_for_cobble (state, ID):
+	return [('op_stone_pickaxe_for_cobble'), ID]
 
-def mining_for_cobble_wooden (state, ID):
-	return [('op_mining_for_cobble_wooden'), ID]
+def wooden_pickaxe_for_cobble (state, ID):
+	return [('op_wooden_pickaxe_for_cobble'), ID]
 
-def crafting_for_plank (state, ID):
-	return [('op_crafting_for_plank'), ID]
+def craft_plank (state, ID):
+	return [('op_craft_plank'), ID]
 
-def crafting_for_stick (state, ID):
-	return [('op_crafting_for_stick'), ID]
+def craft_stick (state, ID):
+	return [('op_craft_stick'), ID]
 
-def crafting_for_bench (state, ID):
-	return [('op_crafting_for_bench'), ID]
+def craft_bench (state, ID):
+	return [('op_craft_bench'), ID]
 
 def craft_rail_at_bench (state, ID): #铁轨，扶手
 	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 1), ('have_enough', ID, 'ingot', 6), ('op_craft_rail_at_bench', ID)]
@@ -285,6 +306,15 @@ def craft_cart_at_bench (state, ID):
 
 def smelf_ore_in_furnace (state, ID):
 	return [('have_enough', ID, 'furnace', 1), ('have_enough', ID, 'coal', 1), ('have_enough', ID, 'ore', 1), ('op_smelf_ore_in_furnace', ID)]
+
+def iron_axe_for_wood (state, ID):
+	return [('have_enough', ID, 'iron_axe', 1), ('op_iron_axe_for_wood', ID)]
+
+def wooden_axe_for_wood (state, ID):
+	return [('have_enough', ID, 'wooden_axe', 1), ('op_wooden_axe_for_wood', ID)]
+
+def stone_axe_for_wood (state, ID):
+	return [('have_enough', ID, 'stone_axe', 1), ('op_stone_axe_for_wood', ID)]
 
 # your code here
 
