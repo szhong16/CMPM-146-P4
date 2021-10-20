@@ -16,6 +16,7 @@ def produce (state, ID, item):
 pyhop.declare_methods ('produce', produce)
 
 def make_method (name, rule):
+
 	def method (state, ID):
 		# your code here
 		pass
@@ -27,13 +28,42 @@ def declare_methods (data):
 	# sort the recipes so that faster recipes go first
 
 	# your code here
-	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)	
-	pass			
+	method_list = []
+
+	# sort the json on input
+	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=False):
+		my_method = make_method(key, value)
+		method_list.append(my_method)
+		print(key, value)
+
+	# method_list.sort()
+	# sorted list of methods
+	# pyhop.declare_methods('foo', m, m)
+	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)
+	pass
 
 def make_operator (rule):
+
+	if 'Profuces' in rule:
+		produces = rule['Produces']
+	else:
+		produces = None
+
+	if 'Consumes' in rule:
+		consume = rule['Comsumes']
+	else:
+		consume = None
+
 	def operator (state, ID):
 		# your code here
-		pass
+		if consume:
+			for key, value in consume.items():
+				state[ID] -= value
+		if produces:
+			for key, value in produces.items():
+				state[ID] += value
+		return state
+		# pass
 	return operator
 
 def declare_operators (data):
@@ -43,7 +73,7 @@ def declare_operators (data):
 
 def add_heuristic (data, ID):
 	# prune search branch if heuristic() returns True
-	# do not change parameters to heuristic(), but can add more heuristic functions with the same parameters: 
+	# do not change parameters to heuristic(), but can add more heuristic functions with the same parameters:
 	# e.g. def heuristic2(...); pyhop.add_check(heuristic2)
 	def heuristic (state, curr_task, tasks, plan, depth, calling_stack):
 		# your code here
@@ -78,10 +108,11 @@ if __name__ == '__main__':
 	rules_filename = 'crafting.json'
 
 	with open(rules_filename) as f:
-		data = json.load(f)
+		data = json.load(f) # returns a dict
+		# print(data.keys())
 
 	state = set_up_state(data, 'agent', time=239) # allot time here
-	goals = set_up_goals(data, 'agent')
+	goals = set_up_goals(data, 'agent')	# agent is the ID
 
 	declare_operators(data)
 	declare_methods(data)
@@ -90,7 +121,7 @@ if __name__ == '__main__':
 	# pyhop.print_operators()
 	# pyhop.print_methods()
 
-	# Hint: verbose output can take a long time even if the solution is correct; 
+	# Hint: verbose output can take a long time even if the solution is correct;
 	# try verbose=1 if it is taking too long
 	pyhop.pyhop(state, goals, verbose=3)
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
