@@ -76,6 +76,8 @@ def add_heuristic (data, ID):
 	# do not change parameters to heuristic(), but can add more heuristic functions with the same parameters:
 	# e.g. def heuristic2(...); pyhop.add_check(heuristic2)
 	def heuristic (state, curr_task, tasks, plan, depth, calling_stack):
+		# Idea:  Since for the tools, we only need to make one and use it for ever
+		# So we want to made the tools' priority higher than others
 		# your code here
 		return False # if True, prune this branch
 
