@@ -18,7 +18,7 @@ pyhop.declare_methods ('produce', produce)
 def make_method (name, rule):
 
 	def method (state, ID):
-		return [('have_enough', ID, 'wooden_axe', 1), ('op_' + name, ID)]
+		# return [('have_enough', ID, 'wooden_axe', 1), ('op_' + name, ID)]
 
 		pass
 
@@ -37,9 +37,9 @@ def declare_methods (data):
 	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=False):
 		my_method = make_method(key, value)
 		method_list.append(my_method)
-		print(key, value)
+		# print(key, value)
 
-	for key, value in method_list:
+	# for key, value in method_list:
 		# pyhop.declare_methods('produce_' + key, m, m)
 		# pyhop.declare_methods()
 	# method_list.sort()
@@ -51,31 +51,17 @@ def declare_methods (data):
 
 def make_operator (rule):
 
-	if 'Produces' in rule:
-		produces = rule['Produces']
-	else:
-		produces = None
-
-	if 'Consumes' in rule:
-		consume = rule['Consumes']
-	else:
-		consume = None
-
 	def operator (state, ID):
 		# your code here
-		if consume:
-			for key, value in consume.items():
-				state[ID] -= value
-		if produces:
-			for key, value in produces.items():
-				state[ID] += value
-		return state
-		# pass
+		pass
 	return operator
 
 def declare_operators (data):
-	# your code here
-	pyhop.declare_operators(make_operator(data['Recipes'].items()))
+	# your code
+	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=False):
+		# print(data['Recipes'].items())
+		# operator = make_operator(value)
+		pyhop.declare_operators(make_operator(value))
 
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
 	pass
@@ -129,8 +115,8 @@ if __name__ == '__main__':
 	declare_methods(data)
 	add_heuristic(data, 'agent')
 
-	# pyhop.print_operators()
-	# pyhop.print_methods()
+	pyhop.print_operators()
+	pyhop.print_methods()
 
 	# Hint: verbose output can take a long time even if the solution is correct;
 	# try verbose=1 if it is taking too long
