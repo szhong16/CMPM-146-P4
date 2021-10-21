@@ -18,7 +18,8 @@ pyhop.declare_methods ('produce', produce)
 def make_method (name, rule):
 
 	def method (state, ID):
-		# your code here
+		return [('have_enough', ID, 'wooden_axe', 1), ('op_' + name, ID)]
+
 		pass
 
 	return method
@@ -28,6 +29,8 @@ def declare_methods (data):
 	# sort the recipes so that faster recipes go first
 
 	# your code here
+	# print("here is data", data)
+
 	method_list = []
 
 	# sort the json on input
@@ -36,21 +39,25 @@ def declare_methods (data):
 		method_list.append(my_method)
 		print(key, value)
 
+	for key, value in method_list:
+		# pyhop.declare_methods('produce_' + key, m, m)
+		# pyhop.declare_methods()
 	# method_list.sort()
 	# sorted list of methods
 	# pyhop.declare_methods('foo', m, m)
+	# pyhop.declare_methods(method_list)
 	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)
-	pass
+	# pass
 
 def make_operator (rule):
 
-	if 'Profuces' in rule:
+	if 'Produces' in rule:
 		produces = rule['Produces']
 	else:
 		produces = None
 
 	if 'Consumes' in rule:
-		consume = rule['Comsumes']
+		consume = rule['Consumes']
 	else:
 		consume = None
 
@@ -68,6 +75,8 @@ def make_operator (rule):
 
 def declare_operators (data):
 	# your code here
+	pyhop.declare_operators(make_operator(data['Recipes'].items()))
+
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
 	pass
 
