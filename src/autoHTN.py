@@ -51,7 +51,10 @@ def declare_methods (data):
 			name_of_produce = pro
 			# print (name_of_produce)
 		my_method = make_method(key, value)
+		pyhop.declare_methods('produce_' + name_of_produce, make_method(key, value))
 		method_list.append((key, name_of_produce, my_method))
+		# for name, produce_name, method in method_list:
+		# 	pyhop.declare_methods('produce_' + produce_name, key)
 		# print(method_list)
 
 	# reversed(method_list)
@@ -71,22 +74,21 @@ def declare_methods (data):
 		# 	# 		print ("2")
 		# 		# meth_name_list.append(produce, key)
 		# 	print(key, value)
-	for name, produce_name, method in method_list:
-		if produce_name == "cart" or produce_name == "rail" or \
-			produce_name == "bench" or produce_name == "furnace" or \
-			produce_name == "iron_axe" or produce_name == "iron_pickaxe" or \
-			produce_name == "stone_axe" or produce_name == "stone_pickaxe" or \
-			produce_name == "wooden_axe" or produce_name == "wooden_pickaxe" or \
-			produce_name == "plank" or produce_name == "stick" or produce_name == "ingot":
-			pyhop.declare_methods('produce_' + produce_name, method)
-		elif produce_name == "wood" or produce_name == "coal" or \
-			produce_name == "ore" or produce_name == "cobble":
-			for i, j, k in method_list:
-				temp = []
-				if j == produce_name:
-					temp.append(name)
-					# print(name)
-			pyhop.declare_methods('produce_' + produce_name, method)
+	# for name, produce_name, method in method_list:
+		# if produce_name == "cart" or produce_name == "rail" or \
+		# 	produce_name == "bench" or produce_name == "furnace" or \
+		# 	produce_name == "iron_axe" or produce_name == "iron_pickaxe" or \
+		# 	produce_name == "stone_axe" or produce_name == "stone_pickaxe" or \
+		# 	produce_name == "wooden_axe" or produce_name == "wooden_pickaxe" or \
+		# 	produce_name == "plank" or produce_name == "stick" or produce_name == "ingot":
+		# 	pyhop.declare_methods('produce_' + produce_name, method)
+		# elif produce_name == "wood" or produce_name == "coal" or produce_name == "ore" or produce_name == "cobble":
+		# 	# for i, j, k in method_list:
+		# 	# 	temp = []
+		# 	# 	if j == produce_name:
+		# 	# 		temp.append(k)
+		# 	# 		# print(name)
+		# pyhop.declare_methods('produce_' + produce_name, method)
 		# pyhop.declare_methods('produce_' + key, m, m)
 		# pyhop.declare_methods()
 	# method_list.sort()
@@ -100,13 +102,13 @@ def make_operator (rule):
 
 	if 'Produces' in rule:
 		produces = rule['Produces']
-		print("produces", produces)
+		# print("produces", produces)
 	else:
 		produces = None
 
 	if 'Consumes' in rule:
 		consume = rule['Consumes']
-		print("consume", consume)
+		# print("consume", consume)
 	else:
 		consume = None
 
@@ -132,7 +134,7 @@ def declare_operators (data):
 		# print(data['Recipes'].items())
 		operator = make_operator(value)
 
-	pyhop.declare_operators(make_operator(value))
+	pyhop.declare_operators(operator)
 
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
 	pass
