@@ -1,6 +1,8 @@
 import pyhop
 import json
 
+from collections import namedtuple
+
 def check_enough (state, ID, item, num):
 	if getattr(state,item)[ID] >= num: return []
 	return False
@@ -17,11 +19,18 @@ pyhop.declare_methods ('produce', produce)
 
 def make_method (name, rule):
 
-	def method (state, ID):
-		# return [('have_enough', ID, 'wooden_axe', 1), ('op_' + name, ID)]
+	my_method_list = []
+	id = 'agent'
 
-		pass
+	for key, value in rule.items():
+		if key != 'Produces':
+			if type(value) == dict:
+				for k, v in value.items():
+					my_method_list.append(('have_enough', id, k, v))
+	my_method_list.append(('op_' + name, id))
 
+	def method(state, ID):
+		return my_method_list
 	return method
 
 def declare_methods (data):
@@ -32,14 +41,52 @@ def declare_methods (data):
 	# print("here is data", data)
 
 	method_list = []
+	meth_name_list = []
 
 	# sort the json on input
-	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=False):
+	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=True):
+		key = key.replace(' ', '_')
+		produce_here = value['Produces'].items()
+		for pro, number in produce_here:
+			name_of_produce = pro
+			# print (name_of_produce)
 		my_method = make_method(key, value)
-		method_list.append(my_method)
-		# print(key, value)
+		method_list.append((key, name_of_produce, my_method))
+		print(method_list)
 
-	# for key, value in method_list:
+	# reversed(method_list)
+		# meth_name_list = [(name_of_produce, key)]
+		# print (meth_name_list[0][1])
+		# counter = 0
+		# if not meth_name_list:
+		# 	meth_name_list = [(name_of_produce, key)]
+		# 	print("initial", name_of_produce, key)
+		# else:
+		# 	# for name, m in meth_name_list:
+		# 	# 	print(name, m)
+		# 	# 	if name_of_produce == name:
+		# 	# 		meth_name_list[counter].append(key)
+		# 	# 		counter += 1
+		# 	# 	else:
+		# 	# 		print ("2")
+		# 		# meth_name_list.append(produce, key)
+		# 	print(key, value)
+	for name, produce_name, method in method_list:
+		if produce_name == "cart" or produce_name == "rail" or \
+			produce_name == "bench" or produce_name == "furnace" or \
+			produce_name == "iron_axe" or produce_name == "iron_pickaxe" or \
+			produce_name == "stone_axe" or produce_name == "stone_pickaxe" or \
+			produce_name == "wooden_axe" or produce_name == "wooden_pickaxe" or \
+			produce_name == "plank" or produce_name == "stick" or produce_name == "ingot":
+			pyhop.declare_methods('produce_' + produce_name, method)
+		elif produce_name == "wood" or produce_name == "coal" or \
+			produce_name == "ore" or produce_name == "cobble":
+			for i, j, k in method_list:
+				temp = []
+				if j == produce_name:
+					temp.append(name)
+					# print(name)
+			pyhop.declare_methods('produce_' + produce_name, method)
 		# pyhop.declare_methods('produce_' + key, m, m)
 		# pyhop.declare_methods()
 	# method_list.sort()
