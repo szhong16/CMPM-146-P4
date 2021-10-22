@@ -17,18 +17,39 @@ pyhop.declare_methods ('produce', produce)
 
 def make_method (name, rule):
 
-	my_method_list = []
-	id = 'agent'
+	# my_method_list = []
+	# id = 'agent'
+	#
+	# for key, value in rule.items():
+	# 	if key != 'Produces':
+	# 		if type(value) == dict:
+	# 			for k, v in value.items():
+	# 				my_method_list.append(('have_enough', id, k, v))
+	# my_method_list.append(('op_' + name, id))
 
-	for key, value in rule.items():
-		if key != 'Produces':
-			if type(value) == dict:
-				for k, v in value.items():
-					my_method_list.append(('have_enough', id, k, v))
-	my_method_list.append(('op_' + name, id))
+	# if 'Requires' in rule:
+	# 	require = rule['Requires']
+	# 	# print(require)
+	# else:
+	# 	require = None
+	#
+	# if 'Consumes' in rule:
+	# 	consume = rule['Consumes']
+	# 	# print(consume)
+	# else:
+	# 	consume = None
+	def method (state, ID):
+		condition = []
+		for key, value in rule.items():
+			if key != 'Produces':
+				if type(value) == dict:
+					for k, v in value.items():
+						condition.append(('have_enough', ID, k, v))
+		condition.append(('op_' + name, ID))
+		return condition
 
-	def method(state, ID):
-		return my_method_list
+	# def method(state, ID):
+	# 	return my_method_list
 	return method
 
 def declare_methods (data):
@@ -87,33 +108,47 @@ def declare_methods (data):
 
 def make_operator (rule):
 
-	if 'Produces' in rule:
-		produces = rule['Produces']
-		# print("produces", produces)
-	else:
-		produces = None
-
-	if 'Consumes' in rule:
-		consume = rule['Consumes']
-		# print("consume", consume)
-	else:
-		consume = None
-
-	time = rule['Time']
+	# if 'Produces' in rule:
+	# 	produces = rule['Produces']
+	# 	# print("produces", produces)
+	# 	# for key, value in produces.items():
+	# 		# print("produces", key, value)
+	# else:
+	# 	produces = None
+	#
+	# if 'Consumes' in rule:
+	# 	consume = rule['Consumes']
+	# 	# print("consume", consume)
+	# 	# for key, value in consume.items():
+	# 		# print("consumes", key, value)
+	# else:
+	# 	consume = None
 
 	def operator (state, ID):
 		# your code here
-		if consume:
-			for key, value in consume.items():
-				state[ID] -= value
-		if produces:
-			for key, value in produces.items():
-				state[ID] += value
-		for key, value in time.items():
-			state[ID] -= value
+		# if consume:
+		# 	for key, value in consume.items():
+		# 		state[ID] -= value
+		# if produces:
+		# 	for key, value in produces.items():
+		# 		state[ID] += value
+		for key, value in rule.items():
+			if key == 'Produces':
+				if type(value) == dict:
+					for k, v in value.items():
+						state.k[ID] += v
+			elif key == 'Consumes':
+				if type(value) == dict:
+					for k, v in value.items():
+						state.k[ID] -= v
+			elif key == 'Time':
+				if type(value) == dict:
+					for k, v in value.items():
+						state.k[ID] += v
 		return state
 		# pass
 	return operator
+
 	# def operator (state, ID):
 	# 	# your code here
 	# 	pass
@@ -122,12 +157,15 @@ def make_operator (rule):
 def declare_operators (data):
 	# your code
 	operator_list = []
-	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=False):
+	for key, value in data['Recipes'].items():
 		# print (value)
 		operator = make_operator(value)
 		operator_list.append(operator)
+		# pyhop.declare_operators(operator)
+		# print(operator)
 
-	pyhop.declare_operators(operator_list[0], operator_list[1])
+	# total 25 operators
+	pyhop.declare_operators(operator_list[0], operator_list[1], operator_list[2], operator_list[3], operator_list[4], operator_list[5], operator_list[6], operator_list[7], operator_list[8], operator_list[9], operator_list[10], operator_list[11], operator_list[12], operator_list[13], operator_list[14], operator_list[15], operator_list[16], operator_list[17], operator_list[18], operator_list[19], operator_list[20], operator_list[21], operator_list[22], operator_list[23], operator_list[24])
 
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
 	pass
