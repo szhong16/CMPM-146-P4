@@ -52,7 +52,7 @@ def declare_methods (data):
 			# print (name_of_produce)
 		my_method = make_method(key, value)
 		method_list.append((key, name_of_produce, my_method))
-		print(method_list)
+		# print(method_list)
 
 	# reversed(method_list)
 		# meth_name_list = [(name_of_produce, key)]
@@ -98,17 +98,41 @@ def declare_methods (data):
 
 def make_operator (rule):
 
+	if 'Produces' in rule:
+		produces = rule['Produces']
+		print("produces", produces)
+	else:
+		produces = None
+
+	if 'Consumes' in rule:
+		consume = rule['Consumes']
+		print("consume", consume)
+	else:
+		consume = None
+
 	def operator (state, ID):
 		# your code here
-		pass
+		if consume:
+			for key, value in consume.items():
+				state[ID] -= value
+		if produces:
+			for key, value in produces.items():
+				state[ID] += value
+		# return state
+		# pass
 	return operator
+	# def operator (state, ID):
+	# 	# your code here
+	# 	pass
+	# return operator
 
 def declare_operators (data):
 	# your code
 	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=False):
 		# print(data['Recipes'].items())
-		# operator = make_operator(value)
-		pyhop.declare_operators(make_operator(value))
+		operator = make_operator(value)
+
+	pyhop.declare_operators(make_operator(value))
 
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
 	pass
