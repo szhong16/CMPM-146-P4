@@ -1,8 +1,6 @@
 import pyhop
 import json
 
-from collections import namedtuple
-
 def check_enough (state, ID, item, num):
 	if getattr(state,item)[ID] >= num: return []
 	return False
@@ -41,7 +39,6 @@ def declare_methods (data):
 	# print("here is data", data)
 
 	method_list = []
-	meth_name_list = []
 
 	# sort the json on input
 	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=True):
@@ -51,30 +48,10 @@ def declare_methods (data):
 			name_of_produce = pro
 			# print (name_of_produce)
 		my_method = make_method(key, value)
-		pyhop.declare_methods('produce_' + name_of_produce, make_method(key, value))
+		# pyhop.declare_methods('produce_' + name_of_produce, make_method(key, value))
 		method_list.append((key, name_of_produce, my_method))
-		# for name, produce_name, method in method_list:
-		# 	pyhop.declare_methods('produce_' + produce_name, key)
-		# print(method_list)
 
-	# reversed(method_list)
-		# meth_name_list = [(name_of_produce, key)]
-		# print (meth_name_list[0][1])
-		# counter = 0
-		# if not meth_name_list:
-		# 	meth_name_list = [(name_of_produce, key)]
-		# 	print("initial", name_of_produce, key)
-		# else:
-		# 	# for name, m in meth_name_list:
-		# 	# 	print(name, m)
-		# 	# 	if name_of_produce == name:
-		# 	# 		meth_name_list[counter].append(key)
-		# 	# 		counter += 1
-		# 	# 	else:
-		# 	# 		print ("2")
-		# 		# meth_name_list.append(produce, key)
-		# 	print(key, value)
-	# for name, produce_name, method in method_list:
+	for name, produce_name, method in method_list:
 		# if produce_name == "cart" or produce_name == "rail" or \
 		# 	produce_name == "bench" or produce_name == "furnace" or \
 		# 	produce_name == "iron_axe" or produce_name == "iron_pickaxe" or \
@@ -82,19 +59,29 @@ def declare_methods (data):
 		# 	produce_name == "wooden_axe" or produce_name == "wooden_pickaxe" or \
 		# 	produce_name == "plank" or produce_name == "stick" or produce_name == "ingot":
 		# 	pyhop.declare_methods('produce_' + produce_name, method)
-		# elif produce_name == "wood" or produce_name == "coal" or produce_name == "ore" or produce_name == "cobble":
-		# 	# for i, j, k in method_list:
-		# 	# 	temp = []
-		# 	# 	if j == produce_name:
-		# 	# 		temp.append(k)
-		# 	# 		# print(name)
-		# pyhop.declare_methods('produce_' + produce_name, method)
-		# pyhop.declare_methods('produce_' + key, m, m)
-		# pyhop.declare_methods()
-	# method_list.sort()
-	# sorted list of methods
-	# pyhop.declare_methods('foo', m, m)
-	# pyhop.declare_methods(method_list)
+		if produce_name == "ore":
+			temp = []
+			for i, j, k in method_list:
+				# print(i, j, k)
+				if j == produce_name:
+					temp.append(k)
+			pyhop.declare_methods('produce_' + produce_name, temp[0], temp[1])
+		elif produce_name == "wood":
+			temp = []
+			for i, j, k in method_list:
+				# print(i, j, k)
+				if j == produce_name:
+					temp.append(k)
+			pyhop.declare_methods('produce_' + produce_name, temp[0], temp[1], temp[2], temp[3])
+		elif produce_name == "coal" or produce_name == "cobble":
+			temp = []
+			for i, j, k in method_list:
+				# print(i, j, k)
+				if j == produce_name:
+					temp.append(k)
+			pyhop.declare_methods('produce_' + produce_name, temp[0], temp[1], temp[2])
+		else:
+			pyhop.declare_methods('produce_' + produce_name, method)
 	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)
 	# pass
 
@@ -112,6 +99,8 @@ def make_operator (rule):
 	else:
 		consume = None
 
+	time = rule['Time']
+
 	def operator (state, ID):
 		# your code here
 		if consume:
@@ -120,7 +109,9 @@ def make_operator (rule):
 		if produces:
 			for key, value in produces.items():
 				state[ID] += value
-		# return state
+		for key, value in time.items():
+			state[ID] -= value
+		return state
 		# pass
 	return operator
 	# def operator (state, ID):
@@ -130,11 +121,13 @@ def make_operator (rule):
 
 def declare_operators (data):
 	# your code
+	operator_list = []
 	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=False):
-		# print(data['Recipes'].items())
+		# print (value)
 		operator = make_operator(value)
+		operator_list.append(operator)
 
-	pyhop.declare_operators(operator)
+	pyhop.declare_operators(operator_list[0], operator_list[1])
 
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
 	pass
