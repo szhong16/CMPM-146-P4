@@ -73,13 +73,6 @@ def declare_methods (data):
 		method_list.append((key, name_of_produce, my_method))
 
 	for name, produce_name, method in method_list:
-		# if produce_name == "cart" or produce_name == "rail" or \
-		# 	produce_name == "bench" or produce_name == "furnace" or \
-		# 	produce_name == "iron_axe" or produce_name == "iron_pickaxe" or \
-		# 	produce_name == "stone_axe" or produce_name == "stone_pickaxe" or \
-		# 	produce_name == "wooden_axe" or produce_name == "wooden_pickaxe" or \
-		# 	produce_name == "plank" or produce_name == "stick" or produce_name == "ingot":
-		# 	pyhop.declare_methods('produce_' + produce_name, method)
 		if produce_name == "ore":
 			temp = []
 			for i, j, k in method_list:
@@ -111,18 +104,21 @@ def make_operator (rule):
 	# if 'Produces' in rule:
 	# 	produces = rule['Produces']
 	# 	# print("produces", produces)
-	# 	# for key, value in produces.items():
-	# 		# print("produces", key, value)
+	# 	for key, value in produces.items():
+	# 		print("produces", key, value)
 	# else:
 	# 	produces = None
 	#
 	# if 'Consumes' in rule:
 	# 	consume = rule['Consumes']
 	# 	# print("consume", consume)
-	# 	# for key, value in consume.items():
-	# 		# print("consumes", key, value)
+	# 	for key, value in consume.items():
+	# 		print("consumes", key, value)
 	# else:
 	# 	consume = None
+	# if 'Time' in rule:
+	# 	time = rule['Time']
+	# 	print("time", time)
 
 	def operator (state, ID):
 		# your code here
@@ -134,17 +130,16 @@ def make_operator (rule):
 		# 		state[ID] += value
 		for key, value in rule.items():
 			if key == 'Produces':
-				if type(value) == dict:
-					for k, v in value.items():
-						state.k[ID] += v
-			elif key == 'Consumes':
-				if type(value) == dict:
-					for k, v in value.items():
+				for k, v in value.items():
+					state.k[ID] += v
+			if key == 'Consumes':
+				for k, v in value.items():
+					if state.k[ID] >= v:
 						state.k[ID] -= v
-			elif key == 'Time':
-				if type(value) == dict:
-					for k, v in value.items():
-						state.k[ID] += v
+			if key == 'Time':
+				for k, v in value.items():
+					if state.time[ID] >= v:
+						state.k[ID] -= v
 		return state
 		# pass
 	return operator
@@ -159,8 +154,8 @@ def declare_operators (data):
 	operator_list = []
 	for key, value in data['Recipes'].items():
 		# print (value)
-		operator = make_operator(value)
-		operator_list.append(operator)
+		operator_temp = make_operator(value)
+		operator_list.append(operator_temp)
 		# pyhop.declare_operators(operator)
 		# print(operator)
 
@@ -168,7 +163,7 @@ def declare_operators (data):
 	pyhop.declare_operators(operator_list[0], operator_list[1], operator_list[2], operator_list[3], operator_list[4], operator_list[5], operator_list[6], operator_list[7], operator_list[8], operator_list[9], operator_list[10], operator_list[11], operator_list[12], operator_list[13], operator_list[14], operator_list[15], operator_list[16], operator_list[17], operator_list[18], operator_list[19], operator_list[20], operator_list[21], operator_list[22], operator_list[23], operator_list[24])
 
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
-	pass
+	# pass
 
 def add_heuristic (data, ID):
 	# prune search branch if heuristic() returns True
