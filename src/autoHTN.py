@@ -11,6 +11,18 @@ def produce_enough (state, ID, item, num):
 pyhop.declare_methods ('have_enough', check_enough, produce_enough)
 
 def produce (state, ID, item):
+	if item == 'bench' or item == 'furnace' or item == 'iron_axe' or item == 'iron_pickaxe' or \
+		item == 'stone_axe' or item == 'stone_pickaxe' or item == 'wooden_axe' or item == 'wooden_pickaxe':
+		if getattr(state, ('made_' + item))[ID] is True:
+			return False
+		else:
+			setattr(state, ('made_' + item), {ID: True})
+			return [('produce_{}'.format(item), ID)]
+	# elif item == 'cart' or item == 'coal' or item == 'cobble' or item == 'ingot' or \
+	# 	item == 'ore' or item == 'plank' or item == 'rail' or item == 'stick' or item == 'wood':
+	# 	return [('produce_{}'.format(item), ID)]
+	# else:
+	# 	return False
 	return [('produce_{}'.format(item), ID)]
 
 pyhop.declare_methods ('produce', produce)
@@ -79,7 +91,7 @@ def declare_methods (data):
 				if j == produce_name:
 					temp_for_wood.append(k)
 				# sorted(temp_for_wood, key=lambda time: t, reverse=False)
-			pyhop.declare_methods('produce_' + produce_name, temp_for_wood[0], temp_for_wood[1], temp_for_wood[2], temp_for_wood[3])
+			pyhop.declare_methods('produce_' + produce_name, temp_for_wood[1], temp_for_wood[0], temp_for_wood[2], temp_for_wood[3])
 		elif produce_name == 'coal' or produce_name == 'cobble':
 			temp_for_coal_cobble = []
 			for i, j, k, t in method_list:
@@ -99,13 +111,13 @@ def make_operator (rule):
 		for key, value in rule.items():
 			if key == 'Produces':
 				for k, v in value.items():
-					setattr(state, k, {ID: v + getattr(state, k)[ID]})
+					setattr(state, k, {ID: getattr(state, k)[ID] + v})
 			if key == 'Consumes':
 				for k, v in value.items():
 					if getattr(state, k)[ID] >= v:
-						setattr(state, k, {ID: v - getattr(state, k)[ID]})
-					else:
-						return False
+						setattr(state, k, {ID: getattr(state, k)[ID] - v})
+					# else:
+					# 	return False
 			if key == 'Time':
 				if state.time[ID] >= v:
 					state.time[ID] -= v
@@ -170,6 +182,7 @@ def set_up_state (data, ID, time=0):
 
 	for item in data['Tools']:
 		setattr(state, item, {ID: 0})
+		setattr(state, 'made_' + item, {ID: False})
 
 	for item, num in data['Initial'].items():
 		setattr(state, item, {ID: num})
@@ -203,5 +216,5 @@ if __name__ == '__main__':
 	# Hint: verbose output can take a long time even if the solution is correct;
 	# try verbose=1 if it is taking too long
 	# pyhop.pyhop(state, goals, verbose=3)
-	pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 3)], verbose=3)
+	pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 30)], verbose=3)
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
