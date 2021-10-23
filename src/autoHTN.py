@@ -52,9 +52,9 @@ def declare_methods (data):
 			name_of_produce = pro
 			# print (name_of_produce)
 		my_method = make_method(key, value)
-		task_name = 'produce_' + name_of_produce
+		# task_name = 'produce_' + name_of_produce
 		# pyhop.declare_methods(name_of_produce, make_method(key, value))
-		method_list.append((key, task_name, my_method))
+		method_list.append((key, name_of_produce, my_method))
 
 # organize this part and try to make it into one function which works for all methods
 # want to create a dict
@@ -62,35 +62,40 @@ def declare_methods (data):
 # try to use pyhop.declare_methods(produce_name, *methods)
 	# but the current one just hard code it and it works
 	for name, produce_name, method in method_list:
-		if produce_name == "produce_ore":
-			temp = []
+		# temp = []
+		# for i, j, k in method_list:
+		# 	if j == produce_name:
+		# 		temp.append(k)
+		# pyhop.declare_methods('produce_' + produce_name, (meth for meth in temp))
+		if produce_name == 'ore':
+			temp_for_ore = []
 			for i, j, k in method_list:
 				# print(i, j, k)
 				if j == produce_name:
-					temp.append(k)
+					temp_for_ore.append(k)
 					# print(produce_name)
-			# reversed(temp)
-			pyhop.declare_methods(produce_name, temp[0], temp[1])
-		elif produce_name == "produce_wood":
-			temp = []
+			# temp_for_ore.reverse()
+			pyhop.declare_methods('produce_' + produce_name, temp_for_ore[0], temp_for_ore[1])
+		elif produce_name == 'wood':
+			temp_for_wood = []
 			for i, j, k in method_list:
 				# print(i, j, k)
 				if j == produce_name:
-					temp.append(k)
+					temp_for_wood.append(k)
 					# print(produce_name)
-			# reversed(temp)
-			pyhop.declare_methods(produce_name, temp[0], temp[1], temp[2], temp[3])
-		elif produce_name == "produce_coal" or produce_name == "produce_cobble":
-			temp = []
+			# temp_for_wood.reverse()
+			pyhop.declare_methods('produce_' + produce_name, temp_for_wood[0], temp_for_wood[1], temp_for_wood[2], temp_for_wood[3])
+		elif produce_name == 'coal' or produce_name == 'cobble':
+			temp_for_coal_cobble = []
 			for i, j, k in method_list:
 				# print(i, j, k)
 				if j == produce_name:
-					temp.append(k)
+					temp_for_coal_cobble.append(k)
 					# print(produce_name)
-			# reversed(temp)
-			pyhop.declare_methods(produce_name, temp[0], temp[1], temp[2])
+			# temp_for_coal_cobble.reverse()
+			pyhop.declare_methods('produce_' + produce_name, temp_for_coal_cobble[0], temp_for_coal_cobble[1], temp_for_coal_cobble[2])
 		else:
-			pyhop.declare_methods(produce_name, method)
+			pyhop.declare_methods('produce_' + produce_name, method)
 	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)
 	# pass
 
@@ -130,7 +135,7 @@ def make_operator (rule):
 def declare_operators (data):
 	# your code
 	operator_list = []
-	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=True):
+	for key, value in data['Recipes'].items():
 		# print (key, value)
 		key = key.replace(' ', '_')
 		operator_temp = make_operator(value)
@@ -205,6 +210,6 @@ if __name__ == '__main__':
 	# Hint: verbose output can take a long time even if the solution is correct;
 	# try verbose=1 if it is taking too long
 	# pyhop.pyhop(state, goals, verbose=3)
-	pyhop.pyhop(state, [('have_enough', 'agent', 'wooden_pickaxe', 1)], verbose=3)
+	pyhop.pyhop(state, [('have_enough', 'agent', 'bench', 1)], verbose=3)
 
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
