@@ -203,7 +203,7 @@ if __name__ == '__main__':
 		data = json.load(f) # returns a dict
 		# print(data.keys())
 
-	state = set_up_state(data, 'agent', time=239) # allot time here
+	state = set_up_state(data, 'agent', time=250) # allot time here
 	goals = set_up_goals(data, 'agent')	# agent is the ID
 
 	declare_operators(data)
@@ -216,5 +216,5 @@ if __name__ == '__main__':
 	# Hint: verbose output can take a long time even if the solution is correct;
 	# try verbose=1 if it is taking too long
 	# pyhop.pyhop(state, goals, verbose=3)
-	pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 30)], verbose=3)
+	pyhop.pyhop(state, [('have_enough', 'agent', 'plank', 1)], verbose=3)
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
