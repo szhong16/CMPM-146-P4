@@ -1,3 +1,5 @@
+# git repo: https://github.com/szhong16/CMPM-146-P4
+
 import pyhop
 import json
 
@@ -11,6 +13,7 @@ def produce_enough (state, ID, item, num):
 pyhop.declare_methods ('have_enough', check_enough, produce_enough)
 
 def produce (state, ID, item):
+	# idea from manual, if it is a tool, check we already made it before or not
 	if item == 'bench' or item == 'furnace' or item == 'iron_axe' or item == 'iron_pickaxe' or \
 		item == 'stone_axe' or item == 'stone_pickaxe' or item == 'wooden_axe' or item == 'wooden_pickaxe':
 		if getattr(state, ('made_' + item))[ID] is True:
@@ -30,7 +33,6 @@ pyhop.declare_methods ('produce', produce)
 def make_method (name, rule):
 
 	#sorting the requirement so that we do bench before wood
-
 	def method (state, ID):
 		condition = []
 		for key, value in rule.items():
@@ -53,54 +55,81 @@ def declare_methods (data):
 	# print("here is data", data)
 	# pyhop.declare_methods(produce_name, *methods)
 
-	method_list = []
+	# method_list = []
+	# making a dict, idea from professor
+	# organize this part and try to make it into one function which works for all methods
+	# want to create a dict
+	# and store all the methods which is for the key
+	# try to use pyhop.declare_methods(produce_name, *methods)
+	method_dict = {}
 
 	# sort the json on input
 
+	# The organize function, hard code version is below
 	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=True):
 		key = key.replace(' ', '_')
-		produce_here = value['Produces'].items()
-		for pro, number in produce_here:
-			name_of_produce = pro
-			# print (name_of_produce)
-		my_method = make_method(key, value)
-		time_for_this = value['Time']
+		for name_of_produce in value['Produces'].items():
+			# isinstance() method from my friend Yanwen Xu
+			# if it is already in method_dict, means it has multiple ways to produce
+			# [Ex: wood]
+			# separate them by the same of the produces
+			# dict: {name, list of method}
+			if name_of_produce in method_dict:
+				if isinstance(method_dict[name_of_produce], list):
+					my_method = make_method(key, value)
+					# print(method_dict[item])
+					method_dict[name_of_produce].append(my_method)
+				else:
+					method_dict[name_of_produce] = [method_dict[name_of_produce]]
+			else: # only one method for achieve this
+				my_method = make_method(key, value)
+				method_dict[name_of_produce] = [my_method]
+
+	for name, method in method_dict.items():
+		# print(name)
+		pyhop.declare_methods('produce_' + name[0], *method)
+
+
+	# for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=True):
+	# 	key = key.replace(' ', '_')
+	# 	produce_here = value['Produces'].items()
+	# 	for pro, number in produce_here:
+	# 		name_of_produce = pro
+	# 		print (name_of_produce)
+	# 	my_method = make_method(key, value)
+	# 	time_for_this = value['Time']
 		# print(time_for_this)
 		# task_name = 'produce_' + name_of_produce
 		# pyhop.declare_methods(name_of_produce, make_method(key, value))
-		method_list.append((key, name_of_produce, my_method, time_for_this))
+		# method_list.append((key, name_of_produce, my_method, time_for_this))
 
-# organize this part and try to make it into one function which works for all methods
-# want to create a dict
-# and store all the methods which is for the key
-# try to use pyhop.declare_methods(produce_name, *methods)
 	# but the current one just hard code it and it works
-	for name, produce_name, method, method_time in method_list:
-		if produce_name == 'ore':
-			temp_for_ore = []
-			for i, j, k, t in method_list:
-				# print(i, j, k)
-				if j == produce_name:
-					temp_for_ore.append(k)
-				# sorted(temp_for_ore, key=lambda time: t, reverse=False)
-			pyhop.declare_methods('produce_' + produce_name, temp_for_ore[0], temp_for_ore[1])
-		elif produce_name == 'wood':
-			temp_for_wood = []
-			for i, j, k, t in method_list:
-				# print(i, j, k)
-				if j == produce_name:
-					temp_for_wood.append(k)
-				# sorted(temp_for_wood, key=lambda time: t, reverse=False)
-			pyhop.declare_methods('produce_' + produce_name, temp_for_wood[1], temp_for_wood[0], temp_for_wood[2], temp_for_wood[3])
-		elif produce_name == 'coal' or produce_name == 'cobble':
-			temp_for_coal_cobble = []
-			for i, j, k, t in method_list:
-				if j == produce_name:
-					temp_for_coal_cobble.append(k)
-				# sorted(temp_for_coal_cobble, key=lambda time: t, reverse=False)
-			pyhop.declare_methods('produce_' + produce_name, temp_for_coal_cobble[0], temp_for_coal_cobble[1], temp_for_coal_cobble[2])
-		else:
-			pyhop.declare_methods('produce_' + produce_name, method)
+	# for name, produce_name, method, method_time in method_list:
+	# 	if produce_name == 'ore':
+	# 		temp_for_ore = []
+	# 		for i, j, k, t in method_list:
+	# 			# print(i, j, k)
+	# 			if j == produce_name:
+	# 				temp_for_ore.append(k)
+	# 			# sorted(temp_for_ore, key=lambda time: t, reverse=False)
+	# 		pyhop.declare_methods('produce_' + produce_name, temp_for_ore[0], temp_for_ore[1])
+	# 	elif produce_name == 'wood':
+	# 		temp_for_wood = []
+	# 		for i, j, k, t in method_list:
+	# 			# print(i, j, k)
+	# 			if j == produce_name:
+	# 				temp_for_wood.append(k)
+	# 			# sorted(temp_for_wood, key=lambda time: t, reverse=False)
+	# 		pyhop.declare_methods('produce_' + produce_name, temp_for_wood[0], temp_for_wood[1], temp_for_wood[2], temp_for_wood[3])
+	# 	elif produce_name == 'coal' or produce_name == 'cobble':
+	# 		temp_for_coal_cobble = []
+	# 		for i, j, k, t in method_list:
+	# 			if j == produce_name:
+	# 				temp_for_coal_cobble.append(k)
+	# 			# sorted(temp_for_coal_cobble, key=lambda time: t, reverse=False)
+	# 		pyhop.declare_methods('produce_' + produce_name, temp_for_coal_cobble[0], temp_for_coal_cobble[1], temp_for_coal_cobble[2])
+	# 	else:
+	# 		pyhop.declare_methods('produce_' + produce_name, method)
 	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)
 	# pass
 
@@ -111,6 +140,7 @@ def make_operator (rule):
 		for key, value in rule.items():
 			if key == 'Produces':
 				for k, v in value.items():
+					# get this from set_up_state
 					setattr(state, k, {ID: getattr(state, k)[ID] + v})
 			if key == 'Consumes':
 				for k, v in value.items():
@@ -142,7 +172,7 @@ def declare_operators (data):
 		operator_temp = make_operator(value)
 		time_for_oper = value['Time']
 		# operator_temp(state, state.ID)
-		# Came from my friend: Yanwen Xu
+		# iterate the name of op; came from my friend: Yanwen Xu
 		operator_temp.__name__ = 'op_' + key
 		operator_list.append((operator_temp, time_for_oper))
 		sorted(operator_list, key=lambda time: time_for_oper, reverse=False)
@@ -216,5 +246,5 @@ if __name__ == '__main__':
 	# Hint: verbose output can take a long time even if the solution is correct;
 	# try verbose=1 if it is taking too long
 	# pyhop.pyhop(state, goals, verbose=3)
-	pyhop.pyhop(state, [('have_enough', 'agent', 'plank', 1)], verbose=3)
-	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
+	# pyhop.pyhop(state, [('have_enough', 'agent', 'iron_pickaxe', 1)], verbose=3)
+	pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
