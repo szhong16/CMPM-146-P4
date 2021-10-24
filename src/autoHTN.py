@@ -14,13 +14,13 @@ pyhop.declare_methods ('have_enough', check_enough, produce_enough)
 
 def produce (state, ID, item):
 	# idea from manual, if it is a tool, check we already made it before or not
-	if item == 'bench' or item == 'furnace' or item == 'iron_axe' or item == 'iron_pickaxe' or \
-		item == 'stone_axe' or item == 'stone_pickaxe' or item == 'wooden_axe' or item == 'wooden_pickaxe':
-		if getattr(state, ('made_' + item))[ID] is True:
-			return False
-		else:
-			setattr(state, ('made_' + item), {ID: True})
-			return [('produce_{}'.format(item), ID)]
+	# if item == 'bench' or item == 'furnace' or item == 'iron_axe' or item == 'iron_pickaxe' or \
+	# 	item == 'stone_axe' or item == 'stone_pickaxe' or item == 'wooden_axe' or item == 'wooden_pickaxe':
+	# 	if getattr(state, ('made_' + item))[ID] is True:
+	# 		return False
+	# 	else:
+	# 		setattr(state, ('made_' + item), {ID: True})
+	# 		return [('produce_{}'.format(item), ID)]
 	# elif item == 'cart' or item == 'coal' or item == 'cobble' or item == 'ingot' or \
 	# 	item == 'ore' or item == 'plank' or item == 'rail' or item == 'stick' or item == 'wood':
 	# 	return [('produce_{}'.format(item), ID)]
@@ -197,8 +197,13 @@ def add_heuristic (data, ID):
 	def heuristic (state, curr_task, tasks, plan, depth, calling_stack):
 		# Idea:  Since for the tools, we only need to make one and use it for ever
 		# So we want to made the tools' priority higher than others
+		# also we sorted the method list when method is created
 		# your code here
-		return False # if True, prune this branch
+		# print(state, curr_task, tasks, plan, depth, calling_stack)
+		# if we already call this task before, don't do it repeatly
+		if curr_task in tasks:
+			return False
+		return True # if True, prune this branch
 
 	pyhop.add_check(heuristic)
 
@@ -246,5 +251,11 @@ if __name__ == '__main__':
 	# Hint: verbose output can take a long time even if the solution is correct;
 	# try verbose=1 if it is taking too long
 	# pyhop.pyhop(state, goals, verbose=3)
+	# pyhop.pyhop(state, [('have_enough', 'agent', 'plank', 1)], verbose=3)
+	# pyhop.pyhop(state, [('have_enough', 'agent', 'wooden_pickaxe', 1)], verbose=3)
+	# pyhop.pyhop(state, [('have_enough', 'agent', 'furnace', 1)], verbose=3)
+	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1)], verbose=3)
+	# pyhop.pyhop(state, [('have_enough', 'agent', 'stone_pickaxe', 1)], verbose=3)
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'iron_pickaxe', 1)], verbose=3)
+	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 10)], verbose=3)
 	pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
