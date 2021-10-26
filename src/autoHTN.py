@@ -2,6 +2,7 @@
 
 import pyhop
 import json
+import time
 
 def check_enough (state, ID, item, num):
 	if getattr(state,item)[ID] >= num: return []
@@ -48,6 +49,7 @@ def declare_methods (data):
 
 	# The organize function, hard code version is below
 	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=True):
+	# for key, value in data['Recipes'].items():
 		key = key.replace(' ', '_')
 		for name_of_produce in value['Produces'].items():
 			# isinstance() method from my friend Yanwen Xu
@@ -92,6 +94,7 @@ def make_operator (rule):
 def declare_operators (data):
 	operator_list = []
 	for key, value in sorted(data['Recipes'].items(), key=lambda item: item[1]["Time"], reverse=True):
+	# for key, value in data['Recipes'].items():
 		key = key.replace(' ', '_')
 		operator_temp = make_operator(value)
 		time_for_oper = value['Time']
@@ -116,7 +119,7 @@ def add_heuristic (data, ID):
 		# So we want to made the tools' priority higher than others
 		# also we sorted the method list when method is created
 		# print(state, curr_task, tasks, plan, depth, calling_stack)
-		# if we already call this task before, don't do it repeatly
+		# if we already call this task before, don't do it repeatedly
 		if curr_task in tasks:
 			return False
 		return True # if True, prune this branch
@@ -152,9 +155,10 @@ if __name__ == '__main__':
 
 	with open(rules_filename) as f:
 		data = json.load(f) # returns a dict
+		# data = sort_data(data)
 		# print(data.keys())
 
-	state = set_up_state(data, 'agent', time=1000) # allot time here
+	state = set_up_state(data, 'agent', time=9000) # allot time here
 	goals = set_up_goals(data, 'agent')	# agent is the ID
 
 	declare_operators(data)
@@ -175,3 +179,30 @@ if __name__ == '__main__':
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'iron_pickaxe', 1)], verbose=3)
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 10)], verbose=3)
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 8), ('have_enough', 'agent', 'rail', 15)], verbose=3)
+
+	# count = 0
+	# start = time.time()
+	# while time.time() - start < 30:
+	# 	pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1), ('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100),
+	# 						('have_enough', 'agent', 'rail', 100)
+	# 						], verbose=0)
+	#
+	# 	count = count + 1900
+	# print(count)
